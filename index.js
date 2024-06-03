@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const Appointment = require('./schema.js'); // Import the Appointment model correctly
+const Appointment = require('./schema.js');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -53,6 +53,17 @@ app.post('/appointments', async (req, res) => {
 
     const savedAppointment = await newAppointment.save();
     res.status(201).json(savedAppointment);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+});
+
+// Endpoint to fetch appointments
+app.get('/appointments', async (req, res) => {
+  try {
+    const appointments = await Appointment.find();
+    res.status(200).json(appointments);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
